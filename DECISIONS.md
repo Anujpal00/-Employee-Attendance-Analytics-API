@@ -1,4 +1,4 @@
-# DECISIONS.md  (about 150-200 words in total - plain language, your own words)
+# DECISIONS.md 
 
 1. **Indexes.**
 On `employees`: unique `emp_code` enforces business identifier uniqueness; `("department", 1), ("joined_on", 1)` accelerates department filtering and headcount lookups. On `attendance_logs`: unique `("emp_code", 1), ("date", 1)` enforces the natural key and race safety; `("date", -1), ("emp_code", 1)` backs paginated listing; `("emp_code", 1), ("punch_in", -1)` speeds up punch-out lookups; and `("date", 1), ("late_minutes", 1)` backs the leaderboard. We considered a partial index on `punch_out: null`, but rejected it since punch-out queries already use `emp_code` and `punch_in` efficiently.
