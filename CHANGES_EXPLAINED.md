@@ -1,11 +1,6 @@
 # 📘 Complete Guide & Changes Explained (`CHANGES_EXPLAINED.md`)
 
-> **Who is this guide for?**  
-> Anyone! Whether you are a software engineer, an HR manager, a recruiter, or someone completely new to programming, this document explains **in plain, everyday English** what this project is, what challenges it had, what was broken, and how every single line of code solves real-world workplace problems.
-
----
-
-## 🏢 1. What is this Project in Plain English?
+## 🏢 1. What is this Project ?
 
 Imagine a medium-sized company with hundreds of employees. Every day:
 1. **Employees arrive at the office or log in remotely:** They "punch in" (swipe their badge).
@@ -98,7 +93,7 @@ def health():
     except Exception:
         raise HTTPException(status_code=503, detail="Database unavailable")
 ```
-- **What this means in plain English:** When someone asks "Are you alive?", the server actually sends a ping message to MongoDB. If MongoDB does not reply, it returns `503 Service Unavailable`.
+- **What this means ** When someone asks "Are you alive?", the server actually sends a ping message to MongoDB. If MongoDB does not reply, it returns `503 Service Unavailable`.
 
 ---
 
@@ -119,7 +114,7 @@ def init_indexes():
     db.attendance_logs.create_index([("emp_code", 1), ("punch_in", -1)])
     db.attendance_logs.create_index([("date", 1), ("late_minutes", 1)])
 ```
-- **What this means in plain English:** Just like the index at the back of a textbook lets you jump directly to the right page, these indexes let MongoDB jump directly to the right employee and date in **1 millisecond**.
+- **What this means** Just like the index at the back of a textbook lets you jump directly to the right page, these indexes let MongoDB jump directly to the right employee and date in **1 millisecond**.
 
 ---
 
@@ -149,7 +144,7 @@ try:
 except DuplicateKeyError:
     raise HTTPException(409, "emp_code already exists")
 ```
-- **What this means in plain English:** The database guarantees that duplicate employee IDs cannot be created under any circumstance. All inputs (emails, shift times, joined dates) are validated before saving.
+- **What this means** The database guarantees that duplicate employee IDs cannot be created under any circumstance. All inputs (emails, shift times, joined dates) are validated before saving.
 
 ---
 
@@ -174,7 +169,7 @@ skip = (page - 1) * page_size
 total = db.employees.count_documents(q)
 cursor = db.employees.find(q, {"_id": 0}).sort("emp_code", 1).skip(skip).limit(page_size)
 ```
-- **What this means in plain English:** Page 1 skips `(1 - 1) * 20 = 0` people (correctly showing people 1 through 20). If you filter for the "Sales" department, `total` only counts Sales people, and the list is sorted neatly from `EMP0001` upwards.
+- **What this means** Page 1 skips `(1 - 1) * 20 = 0` people (correctly showing people 1 through 20). If you filter for the "Sales" department, `total` only counts Sales people, and the list is sorted neatly from `EMP0001` upwards.
 
 ---
 
@@ -208,7 +203,7 @@ try:
 except DuplicateKeyError:
     raise HTTPException(409, "already punched in for this date")
 ```
-- **What this means in plain English:**
+- **What this means**
   1. If the employee doesn't exist, it cleanly returns `404 Not Found`.
   2. Overnight shifts are automatically assigned to the correct calendar day.
   3. Lateness is measured with full-second precision.
@@ -239,7 +234,7 @@ updated = db.attendance_logs.find_one_and_update(
     return_document=ReturnDocument.AFTER
 )
 ```
-- **What this means in plain English:**
+- **What this means**
   1. Finds the worker’s open punch-in record (even if the punch-in happened before midnight yesterday).
   2. Calculates the exact hours worked.
   3. If they worked less than 4.5 hours, flags `half_day = True`.
@@ -270,7 +265,7 @@ cursor = (
     .limit(page_size)
 )
 ```
-- **What this means in plain English:** MongoDB uses the index to find only the requested 20 records and sends just those 20 records over the wire. It takes less than 2 milliseconds regardless of whether you have 10 records or 1,000,000 records.
+- **What this means** MongoDB uses the index to find only the requested 20 records and sends just those 20 records over the wire. It takes less than 2 milliseconds regardless of whether you have 10 records or 1,000,000 records.
 
 ---
 
@@ -292,7 +287,7 @@ if old_work_hours != new_work_hours:
     changes["work_hours"] = {"from": old_work_hours, "to": new_work_hours}
 # 4. Appends to history array without erasing prior history entries
 ```
-- **What this means in plain English:**
+- **What this means**
   - If HR corrects an employee's swipe time from 10:05 AM to 09:28 AM, the API re-calculates late minutes and work hours.
   - It records an unalterable audit log: *“Who changed it, when, why, and what fields changed from what value to what value.”*
   - If a manager submits a change that changes nothing, it rejects it with `422 Unprocessable Entity`.
